@@ -18,7 +18,7 @@
   <main>
     <!-- Start screen -->
     <section id="screen-start" class="screen screen-center">
-      <button type="button" class="btn-begin" id="btn-begin">Begin</button>
+      <button type="button" class="btn-begin" id="btn-begin">התחל</button>
     </section>
 
     <!-- Question screen (filled in by main.js) -->
@@ -32,12 +32,24 @@
 
       <figure class="question-media" id="question-media" hidden>
         <img id="question-image" alt="תמונת מוניטור" hidden>
-        <div class="media-placeholder" id="question-placeholder">
-          <svg class="ecg" viewBox="0 0 300 80" preserveAspectRatio="none" aria-hidden="true">
-            <polyline pathLength="1" points="0,45 40,45 50,40 58,45 70,45 76,52 84,8 92,62 98,45 115,45 128,34 140,45 150,45
-                              190,45 200,40 208,45 220,45 226,52 234,8 242,62 248,45 265,45 278,34 290,45 300,45" />
-          </svg>
-          <span class="media-label">מקום לתמונת מוניטור</span>
+
+        <!-- Live patient monitor (drawn by main.js) -->
+        <div class="monitor" id="monitor" dir="ltr" hidden>
+          <canvas class="monitor-ecg" id="monitor-canvas" aria-label="ECG"></canvas>
+          <div class="monitor-vitals">
+            <div class="vital vital-hr">
+              <span class="vital-label">HR <span class="heart" id="monitor-heart">♥</span></span>
+              <span class="vital-value" id="monitor-hr"></span>
+            </div>
+            <div class="vital vital-spo2">
+              <span class="vital-label">SpO2 %</span>
+              <span class="vital-value" id="monitor-spo2"></span>
+            </div>
+            <div class="vital vital-nibp">
+              <span class="vital-label">NIBP</span>
+              <span class="vital-value" id="monitor-nibp"></span>
+            </div>
+          </div>
         </div>
       </figure>
 

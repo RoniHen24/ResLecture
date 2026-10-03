@@ -4,59 +4,75 @@
 //   answers:     the answer options (any number, 4 recommended)
 //   correct:     index of the correct answer (0 = first)
 //   explanation: shown after answering
-//   image:       optional photo shown above the answers
-//                  ""                  -> shows a placeholder box
-//                  "images/q1.jpg"     -> shows that photo
-//                  (remove the line)   -> no image for that question
+//   monitor:     optional live patient monitor shown above the answers
+//                  rhythm: "sinus" | "vt" | "torsades" | "vf" | "asystole"
+//                  hr:     heart rate number (also sets the trace speed),
+//                          or null to show "--"
+//                  spo2:   number or null for "--"
+//                  nibp:   "120/80" or null for "--/--"
+//   image:       optional photo instead of a monitor, e.g. "images/q1.jpg"
+//   (leave out both monitor and image for a question with no picture)
 // =========================================================
 const QUESTIONS = [
   {
-    question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
-    image: "",
+    question: "מטופל נמצא בדום לב. אין דופק, והצוות כבר התחיל עיסויים. מהי התרופה המרכזית שיש לתת כחלק מפרוטוקול ההחייאה?",
+    monitor: { rhythm: "asystole", hr: null, spo2: null, nibp: null },
     answers: [
-      "Lorem ipsum dolor",
-      "Sit amet consectetur",
-      "Adipiscing elit sed",
-      "Do eiusmod tempor",
+      "אדרנלין",
+      "אמיודרון",
+      "מגנזיום",
+      "לידוקאין",
     ],
     correct: 0,
-    explanation: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
+    explanation: 'אדרנלין הוא הבחירה הנכונה. בדום לב עם אסיסטולה, אדרנלין הוא חלק מרכזי מאלגוריתם ההחייאה. הוא גורם בעיקר לכיווץ כלי הדם, וכך עוזר לשפר את זרימת הדם ללב ולמוח בזמן העיסויים. הוא לא פשוט "מפעיל מחדש" את הלב.',
   },
   {
-    question: "Ut enim ad minim veniam, quis nostrud exercitation?",
-    image: "",
+    question: "החייאה נמשכת והמטופל עדיין ללא דופק. עברו מספר דקות מאז מנת האדרנלין הקודמת, והצוות ממשיך בהחייאה. איזו תרופה צפויה להינתן שוב בהתאם לפרוטוקול?",
+    monitor: { rhythm: "asystole", hr: null, spo2: null, nibp: null },
     answers: [
-      "Ullamco laboris",
-      "Nisi ut aliquip",
-      "Ex ea commodo",
-      "Consequat duis aute",
-    ],
-    correct: 2,
-    explanation: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.",
-  },
-  {
-    question: "Duis aute irure dolor in reprehenderit in voluptate?",
-    image: "",
-    answers: [
-      "Velit esse cillum",
-      "Dolore eu fugiat",
-      "Nulla pariatur",
-      "Excepteur sint",
+      "אמיודרון",
+      "אדרנלין",
+      "סידן",
+      "מגנזיום",
     ],
     correct: 1,
-    explanation: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.",
+    explanation: "אדרנלין הוא הבחירה הנכונה. במהלך דום לב ניתן לחזור על מתן אדרנלין במרווחים המתאימים לפי פרוטוקול ההחייאה. המטרה היא להמשיך לתמוך בזרימת הדם ללב ולמוח בזמן שהעיסויים והטיפול בגורם לדום הלב נמשכים.",
   },
   {
-    question: "Excepteur sint occaecat cupidatat non proident?",
-    image: "",
+    question: "המטופל נמצא ב־VF. בוצעו עיסויים וניסיונות דפיברילציה, אך ה־VF ממשיך. איזו תרופה יכולה להינתן במצב כזה כדי לעזור לייצב את הפעילות החשמלית של הלב?",
+    monitor: { rhythm: "vf", hr: null, spo2: null, nibp: null },
     answers: [
-      "Sunt in culpa",
-      "Qui officia deserunt",
-      "Mollit anim",
-      "Id est laborum",
+      "אדרנלין",
+      "אמיודרון",
+      "מגנזיום",
+      "מגנזיום",
+    ],
+    correct: 1,
+    explanation: "אמיודרון הוא הבחירה הנכונה. כאשר VF ממשיך למרות דפיברילציה, ניתן להשתמש באמיודרון כאנטי־אריתמי. הוא משפיע על תעלות היונים ועל ההולכה החשמלית בלב, ועוזר לשנות את הפעילות החשמלית הלא־תקינה. אפשר לזכור: אדרנלין עוזר לנו עם זרימת הדם, ואמיודרון עוזר לנו עם הבעיה החשמלית.",
+  },
+    {
+    question: "המטופל נמצא ב-pVT למרות דפיברילציה והחייאה. הצוות בוחר להשתמש בתרופה אנטי־אריתמית שיכולה לשמש כחלופה לאמיודרון. איזו תרופה מתאימה?",
+    monitor: { rhythm: "vt", hr: 263, spo2: null, nibp: null },
+    answers: [
+      "מגנזיום",
+      "סודיום ביקרבונט",
+      "לידוקאין",
+      "סידן",
+    ],
+    correct: 2,
+    explanation: "הצוות רוצה להשתמש באנטי־אריתמי שיכול לשמש כחלופה לאמיודרון ב־pVT שלא מגיב לדפיברילציה. התרופה המתאימה במצב כזה היא לידוקאין.",
+  },
+  {
+    question: "מטופל מפתח Torsades de Pointes, וה־ECG מראה גלים משונים   . איזו תרופה מתאימה במיוחד למצב הזה?",
+    monitor: { rhythm: "torsades", hr: 252, spo2: null, nibp: null },
+    answers: [
+      "אדרנלין",
+      "אמיודרון",
+      "לידוקאין",
+      "מגנזיום",
     ],
     correct: 3,
-    explanation: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.",
+    explanation: "במקרה של Torsades de Pointes  , מגנזיום הוא התרופה המועדפת. הוא עוזר לייצב את הפעילות החשמלית של הלב ולמנוע החמרה של האריתמיה.",
   },
 ];
 
@@ -76,7 +92,7 @@ const progressFill = $("progress-fill");
 const questionText = $("question-text");
 const questionMedia = $("question-media");
 const questionImage = $("question-image");
-const questionPlaceholder = $("question-placeholder");
+const monitorBox = $("monitor");
 const answersBox = $("answers");
 const feedback = $("feedback");
 const feedbackTitle = $("feedback-title");
@@ -110,12 +126,16 @@ function renderQuestion() {
 
   questionText.textContent = q.question;
 
-  // Image: photo, placeholder, or nothing
-  questionMedia.hidden = !("image" in q);
-  questionImage.hidden = !q.image;
-  questionPlaceholder.hidden = !!q.image;
-  if (q.image) questionImage.src = q.image;
+  // Picture: live monitor, photo, or nothing
+  const hasMonitor = !!q.monitor;
+  const hasImage = !hasMonitor && !!q.image;
+  questionMedia.hidden = !hasMonitor && !hasImage;
+  monitorBox.hidden = !hasMonitor;
+  questionImage.hidden = !hasImage;
+  if (hasImage) questionImage.src = q.image;
   else questionImage.removeAttribute("src");
+  if (hasMonitor) startMonitor(q.monitor);
+  else stopMonitor();
 
   answersBox.innerHTML = "";
   q.answers.forEach((text, i) => {
@@ -179,11 +199,12 @@ function nextQuestion() {
 }
 
 function showResult() {
+  stopMonitor();
   showScreen("result");
   const total = QUESTIONS.length;
   const ratio = score / total;
 
-  $("score-number").textContent = `${score}/${total}`;
+  $("score-number").textContent = `${Math.round(ratio * 100)}%`;
   $("score-ring").style.setProperty("--score", ratio);
 
   let message;
@@ -194,6 +215,203 @@ function showResult() {
 
   if (ratio === 1) burst($("score-ring"), 40);
 }
+
+// ---------- Patient monitor ----------
+
+const SWEEP_SECONDS = 4; // seconds of trace across the screen
+
+const monitor = {
+  canvas: $("monitor-canvas"),
+  heart: $("monitor-heart"),
+  cfg: null,
+  raf: 0,
+  x: 0, // current pen position (canvas px)
+  y: 0,
+  time: 0, // simulated seconds
+  lastFrame: 0,
+  carry: 0, // fraction of a pixel left over from the last frame
+  beatStart: 0,
+  beatLen: 1,
+};
+
+function startMonitor(cfg) {
+  stopMonitor();
+  const m = monitor;
+  m.cfg = { rhythm: "sinus", ...cfg };
+
+  $("monitor-hr").textContent = cfg.hr ?? "--";
+  $("monitor-spo2").textContent = cfg.spo2 ?? "--";
+  $("monitor-nibp").textContent = cfg.nibp ?? "--/--";
+
+  // Match the canvas to its on-screen size for a sharp line
+  const dpr = window.devicePixelRatio || 1;
+  m.canvas.width = Math.round(m.canvas.clientWidth * dpr);
+  m.canvas.height = Math.round(m.canvas.clientHeight * dpr);
+
+  const ctx = m.canvas.getContext("2d");
+  ctx.clearRect(0, 0, m.canvas.width, m.canvas.height);
+  ctx.strokeStyle = "#3be37f";
+  ctx.lineWidth = 2 * dpr;
+  ctx.lineJoin = "round";
+  ctx.shadowColor = "rgba(59, 227, 127, 0.6)";
+  ctx.shadowBlur = 4 * dpr;
+
+  m.x = 0;
+  m.time = 0;
+  m.beatStart = 0;
+  m.beatLen = beatLength();
+  m.vfPhases = Array.from({ length: 8 }, () => Math.random() * Math.PI * 2);
+  m.y = toCanvasY(ecgSample(0));
+  m.carry = 0;
+
+  // The sweep always runs (even with "reduce motion") because the
+  // moving trace is part of what the question is showing
+  m.lastFrame = performance.now();
+  m.raf = requestAnimationFrame(frame);
+}
+
+function stopMonitor() {
+  cancelAnimationFrame(monitor.raf);
+  monitor.raf = 0;
+}
+
+function frame(now) {
+  const m = monitor;
+  const pxPerSec = m.canvas.width / SWEEP_SECONDS;
+  const elapsed = Math.min(Math.max(now - m.lastFrame, 0) / 1000, 0.1);
+  m.lastFrame = now;
+
+  // Keep the leftover fraction so slow sweeps / fast screens still move
+  m.carry += elapsed * pxPerSec;
+  const steps = Math.floor(m.carry);
+  m.carry -= steps;
+  if (steps > 0) drawTrace(steps, 14 * (window.devicePixelRatio || 1));
+  m.raf = requestAnimationFrame(frame);
+}
+
+// Advance the pen `steps` pixels, erasing a small gap ahead of it
+function drawTrace(steps, gap) {
+  const m = monitor;
+  const ctx = m.canvas.getContext("2d");
+  const w = m.canvas.width;
+  const dt = SWEEP_SECONDS / w;
+
+  ctx.clearRect(m.x, 0, steps + gap, m.canvas.height);
+  if (m.x + steps + gap > w) ctx.clearRect(0, 0, m.x + steps + gap - w, m.canvas.height);
+
+  // Several samples per pixel so narrow spikes (the R wave) are never
+  // skipped over — otherwise beats come out at different heights
+  const SUB = 8;
+
+  ctx.beginPath();
+  ctx.moveTo(m.x, m.y);
+  for (let i = 0; i < steps; i++) {
+    for (let j = 1; j < SUB; j++) {
+      ctx.lineTo(m.x + j / SUB, toCanvasY(ecgSample(m.time + (dt * j) / SUB)));
+    }
+    m.time += dt;
+    m.x += 1;
+    m.y = toCanvasY(ecgSample(m.time));
+    if (m.x >= w) {
+      ctx.stroke();
+      ctx.beginPath();
+      m.x = 0;
+      ctx.moveTo(m.x, m.y);
+    } else {
+      ctx.lineTo(m.x, m.y);
+    }
+  }
+  ctx.stroke();
+}
+
+function toCanvasY(v) {
+  const h = monitor.canvas.height;
+  return h * 0.55 - v * h * 0.38;
+}
+
+function beatLength() {
+  const fallback = monitor.cfg.rhythm === "torsades" ? 230 : 75;
+  return 60 / (monitor.cfg.hr || fallback);
+}
+
+function gauss(t, center, width, amp) {
+  return amp * Math.exp(-((t - center) ** 2) / (2 * width * width));
+}
+
+// ECG value (about -1..1) at simulated time T seconds
+function ecgSample(T) {
+  const m = monitor;
+  const rhythm = m.cfg.rhythm;
+  const TWO_PI = Math.PI * 2;
+
+  if (rhythm === "vf") {
+    // Several waves whose speeds drift, with random starting phases and an
+    // amplitude that swells and fades, so the pattern never repeats
+    const ph = m.vfPhases;
+    const wobble = (freq, drift, driftSpeed, p1, p2) =>
+      Math.sin(TWO_PI * (freq * T + drift * Math.sin(TWO_PI * driftSpeed * T + p1)) + p2);
+
+    const waves =
+      0.35 * wobble(4.3, 0.6, 0.23, ph[0], ph[1]) +
+      0.28 * wobble(5.9, 0.5, 0.31, ph[2], ph[3]) +
+      0.2 * wobble(7.7, 0.4, 0.17, ph[4], ph[5]) +
+      0.15 * Math.sin(TWO_PI * 3.1 * T + ph[6]) +
+      0.08 * Math.sin(TWO_PI * 11.3 * T + ph[7]);
+    const amplitude =
+      0.6 + 0.25 * Math.sin(TWO_PI * 0.27 * T + ph[0]) + 0.15 * Math.sin(TWO_PI * 0.61 * T + ph[3]);
+    const wander = 0.08 * Math.sin(TWO_PI * 0.4 * T + ph[5]);
+    return 1.25 * waves * amplitude + wander;
+  }
+  if (rhythm === "asystole") {
+    return 0.015 * Math.sin(TWO_PI * 0.4 * T);
+  }
+
+  // Beat-based rhythms
+  while (T >= m.beatStart + m.beatLen) {
+    m.beatStart += m.beatLen;
+    m.beatLen = beatLength();
+    pulseHeart();
+  }
+  const t = T - m.beatStart;
+
+  if (rhythm === "vt") {
+    const p = t / m.beatLen;
+    return 0.85 * Math.sin(TWO_PI * p) + 0.25 * Math.sin(2 * TWO_PI * p);
+  }
+
+  if (rhythm === "torsades") {
+    // Polymorphic VT: complexes grow, shrink and flip polarity
+    // ("twisting of the points") every ~2.5 seconds
+    const p = t / m.beatLen;
+    const twist = Math.cos((Math.PI * T) / 2.5);
+    const envelope = Math.sign(twist) * (0.15 + 0.85 * Math.abs(twist));
+    return envelope * (0.9 * Math.sin(TWO_PI * p) + 0.2 * Math.sin(2 * TWO_PI * p));
+  }
+
+  // Sinus: P wave, narrow QRS, T wave — squeezed a bit at fast rates
+  const k = Math.min(1, m.beatLen / 0.6);
+  return (
+    gauss(t, 0.08 * k, 0.02 * k, 0.12) +
+    gauss(t, 0.16 * k, 0.006, -0.12) +
+    gauss(t, 0.18 * k, 0.009, 1) +
+    gauss(t, 0.2 * k, 0.008, -0.25) +
+    gauss(t, 0.4 * k, 0.045 * k, 0.25)
+  );
+}
+
+function pulseHeart() {
+  const heart = monitor.heart;
+  heart.classList.remove("beat");
+  void heart.offsetWidth;
+  heart.classList.add("beat");
+}
+
+// Redraw at the new size when the phone rotates
+window.addEventListener("resize", () => {
+  if (monitor.raf) {
+    startMonitor(monitor.cfg);
+  }
+});
 
 // ---------- Effects ----------
 

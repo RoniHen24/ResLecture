@@ -259,13 +259,8 @@ main {
   .btn-begin::before,
   .screen.enter,
   .answer,
-  .feedback,
-  .ecg polyline {
+  .feedback {
     animation: none !important;
-  }
-
-  .ecg polyline {
-    stroke-dashoffset: 0;
   }
 }
 
@@ -331,50 +326,84 @@ main {
   background: #000;
 }
 
-/* Placeholder styled like a patient monitor */
-.media-placeholder {
-  position: relative;
+/* ---------- Live patient monitor ---------- */
+.monitor {
+  display: grid;
+  grid-template-columns: 1fr minmax(96px, 32%);
+  height: clamp(140px, 42vw, 190px);
+  border-radius: 14px;
+  border: 1.5px solid #1d2b23;
+  background: #0a110d;
+  overflow: hidden;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Roboto Mono", monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.monitor-ecg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background:
+    linear-gradient(rgba(59, 227, 127, 0.07) 1px, transparent 1px) 0 0 / 100% 20px,
+    linear-gradient(90deg, rgba(59, 227, 127, 0.07) 1px, transparent 1px) 0 0 / 20px 100%;
+}
+
+.monitor-vitals {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  aspect-ratio: 16 / 9;
-  padding: 16px;
-  border-radius: 14px;
-  border: 1.5px dashed var(--color-border);
-  background:
-    linear-gradient(rgba(47, 214, 123, 0.06) 1px, transparent 1px) 0 0 / 100% 20px,
-    linear-gradient(90deg, rgba(47, 214, 123, 0.06) 1px, transparent 1px) 0 0 / 20px 100%,
-    #0f1012;
-  overflow: hidden;
+  justify-content: space-around;
+  padding: 6px 12px;
+  border-left: 1px solid #1d2b23;
+  background: #0c1410;
 }
 
-.ecg {
-  width: 100%;
-  height: 45%;
+.vital {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
 }
 
-.ecg polyline {
-  fill: none;
-  stroke: var(--color-correct);
-  stroke-width: 2.5;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-  vector-effect: non-scaling-stroke;
-  filter: drop-shadow(0 0 4px var(--color-correct-glow));
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation: ecg-draw 2.4s linear infinite;
+.vital-label {
+  margin-bottom: 2px;
+  font-size: 11px;
+  font-weight: 700;
 }
 
-@keyframes ecg-draw {
-  to { stroke-dashoffset: 0; }
+.vital-value {
+  font-weight: 700;
+  white-space: nowrap;
 }
 
-.media-label {
-  font-size: 0.85em;
-  color: var(--color-muted);
+.vital-hr { color: #3be37f; }
+.vital-hr .vital-value {
+  font-size: clamp(30px, 10vw, 44px);
+  text-shadow: 0 0 10px rgba(59, 227, 127, 0.5);
+}
+
+.vital-spo2 { color: #4fd1ff; }
+.vital-spo2 .vital-value {
+  font-size: clamp(20px, 6.5vw, 28px);
+  text-shadow: 0 0 8px rgba(79, 209, 255, 0.4);
+}
+
+.vital-nibp { color: #e8eef0; }
+.vital-nibp .vital-value {
+  font-size: clamp(16px, 5vw, 22px);
+}
+
+.heart {
+  display: inline-block;
+  color: var(--color-wrong);
+}
+
+.heart.beat {
+  animation: heart-beat 0.25s ease-out;
+}
+
+@keyframes heart-beat {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.5); }
+  100% { transform: scale(1); }
 }
 
 /* ---------- Answers ---------- */
