@@ -4,10 +4,15 @@
 //   answers:     the answer options (any number, 4 recommended)
 //   correct:     index of the correct answer (0 = first)
 //   explanation: shown after answering
+//   image:       optional photo shown above the answers
+//                  ""                  -> shows a placeholder box
+//                  "images/q1.jpg"     -> shows that photo
+//                  (remove the line)   -> no image for that question
 // =========================================================
 const QUESTIONS = [
   {
     question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
+    image: "",
     answers: [
       "Lorem ipsum dolor",
       "Sit amet consectetur",
@@ -19,6 +24,7 @@ const QUESTIONS = [
   },
   {
     question: "Ut enim ad minim veniam, quis nostrud exercitation?",
+    image: "",
     answers: [
       "Ullamco laboris",
       "Nisi ut aliquip",
@@ -30,6 +36,7 @@ const QUESTIONS = [
   },
   {
     question: "Duis aute irure dolor in reprehenderit in voluptate?",
+    image: "",
     answers: [
       "Velit esse cillum",
       "Dolore eu fugiat",
@@ -41,6 +48,7 @@ const QUESTIONS = [
   },
   {
     question: "Excepteur sint occaecat cupidatat non proident?",
+    image: "",
     answers: [
       "Sunt in culpa",
       "Qui officia deserunt",
@@ -66,6 +74,9 @@ const screens = {
 const progressLabel = $("progress-label");
 const progressFill = $("progress-fill");
 const questionText = $("question-text");
+const questionMedia = $("question-media");
+const questionImage = $("question-image");
+const questionPlaceholder = $("question-placeholder");
 const answersBox = $("answers");
 const feedback = $("feedback");
 const feedbackTitle = $("feedback-title");
@@ -98,6 +109,13 @@ function renderQuestion() {
   progressFill.style.width = `${(current / QUESTIONS.length) * 100}%`;
 
   questionText.textContent = q.question;
+
+  // Image: photo, placeholder, or nothing
+  questionMedia.hidden = !("image" in q);
+  questionImage.hidden = !q.image;
+  questionPlaceholder.hidden = !!q.image;
+  if (q.image) questionImage.src = q.image;
+  else questionImage.removeAttribute("src");
 
   answersBox.innerHTML = "";
   q.answers.forEach((text, i) => {
