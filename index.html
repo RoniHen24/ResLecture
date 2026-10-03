@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#1c1d21">
+  <title>שאלון תרופות החייאה</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700;800&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>שאלון תרופות החייאה</h1>
+  </header>
+
+  <main>
+    <!-- Start screen -->
+    <section id="screen-start" class="screen screen-center">
+      <button type="button" class="btn-begin" id="btn-begin">Begin</button>
+    </section>
+
+    <!-- Question screen (filled in by main.js) -->
+    <section id="screen-quiz" class="screen" hidden>
+      <div class="progress">
+        <div class="progress-label" id="progress-label"></div>
+        <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      </div>
+
+      <h2 class="question" id="question-text" dir="auto"></h2>
+
+      <div class="answers" id="answers"></div>
+
+      <div class="feedback" id="feedback" aria-live="polite" hidden>
+        <div class="feedback-title" id="feedback-title"></div>
+        <p class="feedback-text" id="feedback-text" dir="auto"></p>
+      </div>
+
+      <button type="button" class="btn-begin btn-next" id="btn-next" hidden></button>
+    </section>
+
+    <!-- Results screen -->
+    <section id="screen-result" class="screen screen-center" hidden>
+      <div class="score-ring" id="score-ring">
+        <span class="score-number" id="score-number"></span>
+      </div>
+      <p class="score-text" id="score-text"></p>
+      <button type="button" class="btn-begin" id="btn-restart">התחל מחדש</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>© <span id="year">2026</span> Roni Hen · כל הזכויות שמורות</p>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

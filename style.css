@@ -1,0 +1,565 @@
+/* =========================================================
+   Phone-only layout
+   Designed for phone viewport widths (CSS px):
+     320        small / older phones (iPhone SE 1st gen, small Android)
+     360–384    common Android (Galaxy S series, many mid-range)
+     375–402    standard iPhones, Pixel (393), compact Android
+     412–440    large phones (Pixel XL/Pro, Galaxy Plus/Ultra, iPhone Plus/Pro Max)
+   Anything wider (tablets, desktop) shows the same phone-width
+   column centered on screen.
+   ========================================================= */
+
+:root {
+  --phone-max-width: 480px;
+
+  color-scheme: dark;
+
+  --color-bg: #1c1d21;
+  --color-bg-glow: #2e2326;
+  --color-text: #ececf1;
+  --color-muted: #8b8d98;
+  --color-border: #2f3138;
+  --color-accent: #ff6b6b;
+  --color-outside: #111214;
+
+  --btn-from: #ff2d3f;
+  --btn-to: #ff8a5c;
+  --btn-dim: #4a161b;
+  --btn-glow: rgba(255, 45, 63, 0.45);
+
+  --color-correct: #2fd67b;
+  --color-correct-glow: rgba(47, 214, 123, 0.4);
+  --color-wrong: #ff2d3f;
+  --color-wrong-glow: rgba(255, 45, 63, 0.4);
+  --color-card: rgba(255, 255, 255, 0.04);
+
+  /* Fluid sizes: scale smoothly between 320px and 480px wide */
+  --space: clamp(12px, 4vw, 20px);
+  --font-base: clamp(15px, 4.2vw, 17px);
+  --font-h1: clamp(22px, 7vw, 30px);
+
+  /* Notches, punch-hole cameras and gesture bars */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Make the hidden attribute win over display: flex etc. */
+[hidden] {
+  display: none !important;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh; /* accounts for mobile browser toolbars */
+  font-family: "Heebo", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: var(--font-base);
+  line-height: 1.5;
+  color: var(--color-text);
+  background:
+    radial-gradient(120% 60% at 50% 0%, var(--color-bg-glow) 0%, transparent 70%),
+    var(--color-bg);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* App shell: header / main / footer stacked, main fills the space */
+body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--phone-max-width);
+  margin-inline: auto;
+}
+
+img,
+video,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ---------- Header ---------- */
+header {
+  position: relative; /* scrolls with the page, so it never covers content */
+  z-index: 10;
+  padding: calc(var(--space) * 1.5 + var(--safe-top)) calc(var(--space) + var(--safe-right))
+           calc(var(--space) * 1.25) calc(var(--space) + var(--safe-left));
+  text-align: center;
+  background: rgba(28, 29, 33, 0.85);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+/* Gradient line under the header, fading out at the edges */
+header::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--btn-from), var(--btn-to), transparent);
+  opacity: 0.6;
+}
+
+header h1 {
+  margin: 0;
+  font-size: var(--font-h1);
+  font-weight: 800;
+  line-height: 1.25;
+  background: linear-gradient(135deg, #ffffff 0%, #ffc4c4 55%, #ff9a7a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-wrap: balance;
+}
+
+/* Short accent bar under the title */
+header h1::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 4px;
+  margin: 10px auto 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--btn-from), var(--btn-to));
+  box-shadow: 0 0 12px var(--btn-glow);
+}
+
+/* ---------- Main ---------- */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space) calc(var(--space) + var(--safe-right))
+           var(--space) calc(var(--space) + var(--safe-left));
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--space) * 1.1);
+}
+
+/* Start and result screens: content centered in the space */
+.screen-center {
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Begin button (hollow, animated border) ---------- */
+
+/* Lets the border gradient's angle be animated */
+@property --btn-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.btn-begin {
+  --btn-angle: 0deg;
+  position: relative;
+  isolation: isolate;
+  width: min(100%, 280px);
+  min-height: 60px;
+  padding: 0 32px;
+  border: 0;
+  border-radius: 999px;
+  font-size: clamp(18px, 5.4vw, 22px);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ffe3e3;
+  text-shadow: 0 0 12px var(--btn-glow);
+  background: transparent;
+  box-shadow:
+    0 0 24px -6px var(--btn-glow),
+    inset 0 0 20px -8px var(--btn-glow);
+  cursor: pointer;
+  animation: btn-pulse 2.8s ease-in-out infinite;
+  transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+/* The border: a rotating red "comet" ring over a dim red track,
+   masked so only a 2px ring shows and the middle stays hollow */
+.btn-begin::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  padding: 2px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--btn-angle),
+    var(--btn-dim) 0%,
+    var(--btn-from) 22%,
+    var(--btn-to) 28%,
+    var(--btn-dim) 42%,
+    var(--btn-dim) 50%,
+    var(--btn-from) 72%,
+    var(--btn-to) 78%,
+    var(--btn-dim) 92%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: btn-spin 3s linear infinite;
+}
+
+.btn-begin:active {
+  transform: scale(0.96);
+  background-color: rgba(255, 45, 63, 0.14);
+}
+
+.btn-begin:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 5px;
+}
+
+@media (hover: hover) {
+  .btn-begin:hover {
+    transform: translateY(-2px);
+    background-color: rgba(255, 45, 63, 0.08);
+  }
+
+  .btn-begin:hover::before {
+    animation-duration: 1.5s;
+  }
+}
+
+@keyframes btn-spin {
+  to { --btn-angle: 360deg; }
+}
+
+@keyframes btn-pulse {
+  0%, 100% { box-shadow: 0 0 24px -6px var(--btn-glow), inset 0 0 20px -8px var(--btn-glow); }
+  50% { box-shadow: 0 0 36px -4px var(--btn-glow), inset 0 0 26px -6px var(--btn-glow); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-begin,
+  .btn-begin::before,
+  .screen.enter,
+  .answer,
+  .feedback {
+    animation: none !important;
+  }
+}
+
+/* =========================================================
+   Quiz
+   ========================================================= */
+
+/* Question screen slides in */
+.screen.enter {
+  animation: slide-in 0.35s ease-out;
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------- Progress ---------- */
+.progress-label {
+  margin-bottom: 8px;
+  font-size: 0.85em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+}
+
+.progress-track {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--btn-from), var(--btn-to));
+  box-shadow: 0 0 10px var(--btn-glow);
+  transition: width 0.5s ease;
+}
+
+/* ---------- Question ---------- */
+.question {
+  margin: 4px 0 0;
+  font-size: clamp(19px, 5.6vw, 23px);
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+/* ---------- Answers ---------- */
+.answers {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.answer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 56px;
+  padding: 10px 14px;
+  text-align: start;
+  color: var(--color-text);
+  background: var(--color-card);
+  border: 1.5px solid var(--color-border);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease,
+              transform 0.15s ease, opacity 0.3s ease;
+}
+
+.answer-letter {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-weight: 800;
+  font-size: 0.9em;
+  color: var(--btn-to);
+  border: 1.5px solid var(--btn-dim);
+  transition: inherit;
+}
+
+.answer-text {
+  flex: 1;
+}
+
+.answer:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+@media (hover: hover) {
+  .answer:hover:not(:disabled) {
+    border-color: var(--btn-from);
+    background: rgba(255, 45, 63, 0.06);
+  }
+}
+
+.answer:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+/* Correct answer: green glow + pop */
+.answer.is-correct {
+  opacity: 1;
+  border-color: var(--color-correct);
+  background: rgba(47, 214, 123, 0.1);
+  box-shadow: 0 0 22px -4px var(--color-correct-glow);
+  animation: pop 0.4s ease;
+}
+
+.answer.is-correct .answer-letter {
+  color: #0d2a1b;
+  background: var(--color-correct);
+  border-color: var(--color-correct);
+}
+
+/* Wrong answer the user picked: red + shake */
+.answer.is-wrong {
+  opacity: 1;
+  border-color: var(--color-wrong);
+  background: rgba(255, 45, 63, 0.1);
+  box-shadow: 0 0 22px -4px var(--color-wrong-glow);
+  animation: shake 0.45s ease;
+}
+
+.answer.is-wrong .answer-letter {
+  color: #ffffff;
+  background: var(--color-wrong);
+  border-color: var(--color-wrong);
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(7px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(3px); }
+}
+
+/* ---------- Feedback card ---------- */
+.feedback {
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1.5px solid var(--color-border);
+  background: var(--color-card);
+  animation: slide-in 0.3s ease-out;
+}
+
+.feedback.is-correct {
+  border-color: rgba(47, 214, 123, 0.5);
+  background: rgba(47, 214, 123, 0.07);
+}
+
+.feedback.is-wrong {
+  border-color: rgba(255, 45, 63, 0.5);
+  background: rgba(255, 45, 63, 0.07);
+}
+
+.feedback-title {
+  font-size: 1.15em;
+  font-weight: 800;
+}
+
+.feedback.is-correct .feedback-title { color: var(--color-correct); }
+.feedback.is-wrong .feedback-title { color: var(--color-wrong); }
+
+.feedback-text {
+  margin: 4px 0 0;
+  color: var(--color-muted);
+}
+
+.btn-next {
+  align-self: center;
+  animation: slide-in 0.3s ease-out, btn-pulse 2.8s ease-in-out infinite;
+}
+
+/* ---------- Confetti ---------- */
+.confetti {
+  position: fixed;
+  z-index: 100;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 2px;
+  pointer-events: none;
+  animation: confetti 0.9s cubic-bezier(0.2, 0.7, 0.4, 1) forwards;
+}
+
+@keyframes confetti {
+  from { transform: translate(0, 0) rotate(0); opacity: 1; }
+  to { transform: translate(var(--dx), calc(var(--dy) + 40px)) rotate(var(--rot)); opacity: 0; }
+}
+
+/* ---------- Results ---------- */
+.score-ring {
+  --score: 0;
+  display: grid;
+  place-items: center;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side, var(--color-bg) 86%, transparent 87%),
+    conic-gradient(var(--btn-from), var(--btn-to) calc(var(--score) * 100%), var(--color-border) 0);
+  box-shadow: 0 0 40px -10px var(--btn-glow);
+}
+
+.score-number {
+  direction: ltr;
+  font-size: 40px;
+  font-weight: 800;
+}
+
+.score-text {
+  margin: 0 0 8px;
+  font-size: 1.1em;
+  text-align: center;
+}
+
+/* ---------- Footer ---------- */
+footer {
+  padding: var(--space) calc(var(--space) + var(--safe-right))
+           calc(var(--space) + var(--safe-bottom)) calc(var(--space) + var(--safe-left));
+  font-size: 0.8em;
+  text-align: center;
+  color: var(--color-muted);
+  border-top: 1px solid var(--color-border);
+}
+
+footer p {
+  margin: 0;
+  opacity: 0.8;
+}
+
+/* Form controls: 16px+ prevents iOS zoom-on-focus */
+input,
+select,
+textarea,
+button {
+  font: inherit;
+  font-size: max(16px, 1em);
+}
+
+button {
+  min-height: 44px;
+}
+
+/* =========================================================
+   Phone size adjustments
+   ========================================================= */
+
+/* Very small phones (≤ 340px) */
+@media (max-width: 340px) {
+  :root {
+    --space: 10px;
+  }
+}
+
+/* Standard phones (341px – 480px): uses the fluid defaults above */
+
+/* Phone in landscape: short height, so keep the header compact */
+@media (orientation: landscape) and (max-height: 500px) {
+  body {
+    max-width: none;
+  }
+
+  header {
+    padding-top: calc(8px + var(--safe-top));
+    padding-bottom: 8px;
+  }
+
+  header h1::after {
+    margin-top: 6px;
+  }
+}
+
+/* =========================================================
+   Larger than a phone (tablets / desktop):
+   keep the phone-width column, centered, with a frame
+   ========================================================= */
+@media (min-width: 481px) and (min-height: 501px) {
+  html {
+    background: var(--color-outside);
+  }
+
+  body {
+    box-shadow: 0 0 0 1px var(--color-border), 0 8px 40px rgba(0, 0, 0, 0.6);
+  }
+}
